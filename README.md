@@ -1,4 +1,4 @@
 gh-free-issues
 ==============
 
-Remote github issues viewer
+Remote github issues accessor
