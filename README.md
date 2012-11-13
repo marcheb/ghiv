@@ -1,4 +1,4 @@
-gh-free-issues
+gharial
 ==============
 
 Remote github issues accessor
