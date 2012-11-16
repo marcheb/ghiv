@@ -1,12 +1,15 @@
 module Gharial
-  class GithubMapper
+  class Base
     Gharial::Configs.load!(File.expand_path(File.dirname(__FILE__)) + '/../../config/config.yml')
     GH_URL = "#{Gharial::Configs.github[:api_url]}/#{Gharial::Configs.github[:user]}/#{Gharial::Configs.github[:repository]}"
 
     def self.all
-      collections = self.name.split('::').last.downcase
-      records = Gharial::Transceiver.new("#{GH_URL}/#{collections}", ssl: true).get
+      records = Gharial::Transceiver.new("#{GH_URL}/#{self.collection_name}", ssl: true).get
       records.map { |r| self.new(r)}
+    end
+
+    def self.collection_name
+      self.name.split('::').last.downcase
     end
 
     #Instance method

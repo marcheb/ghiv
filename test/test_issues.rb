@@ -6,8 +6,8 @@ module Test
     def test_all
       issues = Gharial::Issues.all
 
-      assert_equal(2, issues.count)
-      assert_equal("There's a bug here", issues.first.title )
+      assert_equal(3, issues.count)
+      assert_equal("i'm 12 what is this", issues.first.title )
     end
   end
 end

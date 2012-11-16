@@ -1,12 +1,13 @@
 module Gharial
   class Runner
     def initialize(arguments)
-      @command = arguments[0]
-      @collections = arguments[1]
+      @collections = arguments.delete_at(0)
+      @command = arguments.delete_at(0)
+      @arguments = arguments
     end
 
     def run
-      Gharial.const_get(@collections.capitalize).send(@command)
+      Gharial.const_get(@collections.capitalize).send(@command, @arguments).inspect
     end
   end
 end
