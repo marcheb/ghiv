@@ -1,13 +1,5 @@
 module Gharial
   class Base
-    Gharial::Configs.load!(File.expand_path(File.dirname(__FILE__)) + '/../../config/config.yml')
-    GH_URL = "#{Gharial::Configs.github[:api_url]}/#{Gharial::Configs.github[:user]}/#{Gharial::Configs.github[:repository]}"
-
-    def self.all
-      records = Gharial::Transceiver.new("#{GH_URL}/#{self.collection_name}", ssl: true).get
-      records.map { |r| self.new(r)}
-    end
-
     def self.collection_name
       self.name.split('::').last.downcase
     end
@@ -21,6 +13,11 @@ module Gharial
     private
     def accessors!
       Issues.fields.each { |f| self.class.send(:attr_accessor, f) }
+    end
+
+    def self.method_missing(name, *args, &block)
+      query = Gharial::Query.new(self.collection_name)
+      args.empty? ? query.send(name) : query.send(name, args.first) || fail(NoMethodError, "unknown method #{name}", caller)
     end
   end
 end
