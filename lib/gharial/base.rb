@@ -11,8 +11,12 @@ module Gharial
 
     private
     def self.method_missing(name, *args, &block)
-      query = Gharial::Query.new(self.collection_name)
-      args.empty? ? query.send(name) : query.send(name, args.first) || fail(NoMethodError, "unknown method #{name}", caller)
+      begin
+        query = Gharial::Query.new(self.collection_name)
+        args.empty? ? query.send(name) : query.send(name, args.first)
+      rescue
+        fail(NoMethodError, "unknown method \"#{name}\"", caller)
+      end
     end
 
     def accessors!

@@ -8,7 +8,6 @@ module Test
 
       assert_equal(3, issues.count)
       assert_equal("i'm 12 what is this", issues.first.title )
-      (1..1000000).each{|a| a+1}
     end
 
     def test_labels
@@ -16,7 +15,6 @@ module Test
 
       assert_equal(1, issues.count)
       assert_equal("There's a bug here", issues.first.title )
-      (1..1000000).each{|a| a+1}
     end
 
     def test_creator
@@ -24,7 +22,6 @@ module Test
 
       assert_equal(2, issues.count)
       assert_equal("There's a bug here", issues.first.title )
-      (1..1000000).each{|a| a+1}
     end
 
     def test_labels_creator
@@ -32,7 +29,12 @@ module Test
 
       assert_equal(2, issues.count)
       assert_equal("There's a bug here", issues.first.title )
-      (1..1000000).each{|a| a+1}
+    end
+
+    def test_unknown_method
+      assert_raise NoMethodError do
+        Gharial::Issues.unknown
+      end
     end
   end
 end
