@@ -18,6 +18,12 @@ module Gharial
       self
     end
 
+    def execute
+      self.parse
+      records = Gharial::Transceiver.new("#{GH_URL}/#{@collection}#{'?' + @a.join('&') if not @a.empty?}", ssl: true).get
+      records.map { |r| Gharial.const_get(@collection.capitalize).new(r) }
+    end
+
     def labels(elements=[])
       @labels = elements
       self
@@ -27,12 +33,6 @@ module Gharial
       @a = []
       @a << "labels=#{@labels.join(',')}" if @labels and not @labels.empty?
       @a << "creator=#{@creator}" if @creator
-    end
-
-    def execute
-      self.parse
-      records = Gharial::Transceiver.new("#{GH_URL}/#{@collection}#{'?' + @a.join('&') if not @a.empty?}", ssl: true).get
-      records.map { |r| Gharial.const_get(@collection.capitalize).new(r) }
     end
   end
 end
