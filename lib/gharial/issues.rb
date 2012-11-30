@@ -1,7 +1,7 @@
 module Gharial
   class Issues < Base
     def self.fields
-      ['url', 'html_url', 'number', 'state', 'title', 'body']
+      ['body', 'created_at', 'html_url', 'number', 'state', 'title', 'url']
     end
   end
 end

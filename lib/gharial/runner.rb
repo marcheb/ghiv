@@ -7,7 +7,7 @@ module Gharial
     end
 
     def run
-      Gharial.const_get(@collections.capitalize).send(@command, @arguments).inspect
+      puts Gharial.const_get(@collections.capitalize).send(@command, @arguments)
     end
   end
 end

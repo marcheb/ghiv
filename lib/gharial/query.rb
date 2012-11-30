@@ -1,13 +1,14 @@
 module Gharial
   class Query
-    Gharial::Configs.load!(File.expand_path(File.dirname(__FILE__)) + '/../../config/config.yml')
-    GH_URL = "#{Gharial::Configs.github[:api_url]}/#{Gharial::Configs.github[:user]}/#{Gharial::Configs.github[:repository]}"
+    Configs.load!(File.expand_path(File.dirname(__FILE__)) + '/../../config/config.yml')
+    GH_URL = "#{Configs.github[:api_url]}/#{Configs.github[:user]}/#{Configs.github[:repository]}"
 
     def initialize(collection)
       @collection = collection
+      @query = []
     end
 
-    attr_reader :labels
+    attr_reader :creator, :direction, :labels, :sort
 
     def all
       execute
@@ -18,21 +19,33 @@ module Gharial
       self
     end
 
+    def direction(direction)
+      @direction = direction
+      self
+    end
+
     def execute
       self.parse
-      records = Gharial::Transceiver.new("#{GH_URL}/#{@collection}#{'?' + @a.join('&') if not @a.empty?}", ssl: true).get
+      records = Transceiver.new("#{GH_URL}/#{@collection}#{'?' + @query.join('&') if not @query.empty?}", ssl: true).get
       records.map { |r| Gharial.const_get(@collection.capitalize).new(r) }
     end
 
-    def labels(elements=[])
+    def labels(elements)
       @labels = elements
       self
     end
 
     def parse
-      @a = []
-      @a << "labels=#{@labels.join(',')}" if @labels and not @labels.empty?
-      @a << "creator=#{@creator}" if @creator
+      @query << "creator=#{@creator}" if @creator
+      @query << "direction=#{@direction}" if @direction and ['asc', 'desc'].include? @direction
+      @query << "labels=#{@labels.join(',')}" if @labels and not @labels.empty?
+      @query << "sort=#{@sort}" if @sort and ['comments', 'created', 'updated'].include? @direction
     end
+
+    def sort(filter)
+      @sort = filter
+      self
+    end
+
   end
 end

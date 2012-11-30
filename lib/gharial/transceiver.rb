@@ -4,7 +4,7 @@ module Gharial
     require "net/https"
     require "uri"
 
-    Gharial::Configs.load!(File.expand_path(File.dirname(__FILE__)) + '/../../config/config.yml')
+    Configs.load!(File.expand_path(File.dirname(__FILE__)) + '/../../config/config.yml')
 
     def initialize(url, options={})
       options = {ssl: false}.merge!(options)
@@ -16,7 +16,7 @@ module Gharial
 
     def get
       request = Net::HTTP::Get.new(@uri.request_uri)
-      request.basic_auth Gharial::Configs.github[:user], Gharial::Configs.github[:password]
+      request.basic_auth Configs.github[:user], Gharial::Configs.github[:password]
       response = @http.request(request)
       return response.code == "200" ? JSON.parse(response.body) : raise({ errors: { code: response.code, body: response.body }}.inspect)
     end
