@@ -4,7 +4,7 @@ module Test
 
   class TestIssues < Test::Unit::TestCase
     def test_all
-      issues = Gharial::Issues.all
+      issues = Gharial::Issues.all.execute
 
       assert_equal(3, issues.count)
       assert_equal("i'm 12 what is this", issues.first.title )

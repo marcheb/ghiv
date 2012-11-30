@@ -1,8 +1,5 @@
 module Gharial
   class Query
-    Configs.load!(File.expand_path(File.dirname(__FILE__)) + '/../../config/config.yml')
-    GH_URL = "#{Configs.github[:api_url]}/#{Configs.github[:user]}/#{Configs.github[:repository]}"
-
     def initialize(collection)
       @collection = collection
       @query = []
@@ -11,7 +8,7 @@ module Gharial
     attr_reader :creator, :direction, :labels, :sort
 
     def all
-      execute
+      self
     end
 
     def creator(user_name)
@@ -26,7 +23,7 @@ module Gharial
 
     def execute
       self.parse
-      records = Transceiver.new("#{GH_URL}/#{@collection}#{'?' + @query.join('&') if not @query.empty?}", ssl: true).get
+      records = Transceiver.new("/#{@collection}#{'?' + @query.join('&') if not @query.empty?}", ssl: true).get
       records.map { |r| Gharial.const_get(@collection.capitalize).new(r) }
     end
 

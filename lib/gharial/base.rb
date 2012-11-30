@@ -13,7 +13,7 @@ module Gharial
     def self.method_missing(name, *args, &block)
       begin
         query = Query.new(self.collection_name)
-        args.empty? ? query.send(name) : query.send(name, args.first)
+        (args.empty? || args.first.empty?) ? query.send(name) : query.send(name, args.first)
       rescue
         fail(NoMethodError, "unknown method \"#{name}\"", caller)
       end

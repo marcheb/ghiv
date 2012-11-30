@@ -7,7 +7,9 @@ module Gharial
     end
 
     def run
-      puts Gharial.const_get(@collections.capitalize).send(@command, @arguments)
+      Gharial.const_get(@collections.capitalize).send(@command, @arguments).execute.each { |r| puts r.number.to_s + " : " + r.title }
+      puts
+      puts '"gharial issues show:[number]" to see details'
     end
   end
 end
