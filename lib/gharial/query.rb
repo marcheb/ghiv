@@ -1,17 +1,12 @@
 module Gharial
   class Query
-    def initialize(collection)
-      @collection = collection
-      @query = []
+    attr_reader :creator, :direction, :elements, :labels, :number, :sort
+
+    def initialize
+      @number = nil
     end
 
-    attr_reader :creator, :direction, :labels, :sort
-
-    def all
-      self
-    end
-
-    def creator(user_name)
+    def creator=(user_name)
       @creator = user_name
       self
     end
@@ -21,10 +16,12 @@ module Gharial
       self
     end
 
-    def execute
-      self.parse
-      records = Transceiver.new("/#{@collection}#{'?' + @query.join('&') if not @query.empty?}", ssl: true).get
-      records.map { |r| Gharial.const_get(@collection.capitalize).new(r) }
+    def direction?
+      [:asc, :desc].include? @direction
+    end
+
+    def elements?
+      @elements and not @elements.empty?
     end
 
     def labels(elements)
@@ -32,16 +29,36 @@ module Gharial
       self
     end
 
+    def labels?
+      @labels and not @labels.empty?
+    end
+
+    def number=(number)
+      @number = number
+      self
+    end
+
+    def set_from_config
+      direction Config.query_direction
+      sort Config.query_sort
+      #['direction', 'sort'].each { |c| self.send("#{c}=", Config.send("query_#{c}")) if Config.send("query_#{c}" }
+    end
+
     def parse
-      @query << "creator=#{@creator}" if @creator
-      @query << "direction=#{@direction}" if @direction and ['asc', 'desc'].include? @direction
-      @query << "labels=#{@labels.join(',')}" if @labels and not @labels.empty?
-      @query << "sort=#{@sort}" if @sort and ['comments', 'created', 'updated'].include? @direction
+      @elements = []
+      @elements << "creator=#{@creator}" if @creator
+      @elements << "direction=#{@direction}" if direction?
+      @elements << "labels=#{@labels.join(',')}" if labels?
+      @elements << "sort=#{@sort}" if sort?
     end
 
     def sort(filter)
       @sort = filter
       self
+    end
+
+    def sort?
+      [:comments, :created, :updated].include? @sort
     end
 
   end
