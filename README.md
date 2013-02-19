@@ -1,4 +1,4 @@
 ghiv
 ==============
 
-Remote github issues accessor
+Github issues viewer
