@@ -1,6 +1,6 @@
 require 'optparse'
 
-module Gharial
+module Ghiv
   class Runner
     def initialize(arguments, stdin, stdout)
       @arguments = arguments
@@ -18,7 +18,7 @@ module Gharial
 
     def parse_options
       options = OptionParser.new
-      options.banner = "Usage: gharial [options]"
+      options.banner = "Usage: ghiv [options]"
       options.separator "Global options:"
       options.on('-u', '--user USER', "Your Github username")   { |u| Config.user = u }
       options.on('-p', '--password PASSWORD', "Your Github password")   { |p| Config.password = p }

@@ -1,4 +1,4 @@
-module Gharial
+module Ghiv
   class UI
     class << self
       def list(issues)

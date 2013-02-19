@@ -1,4 +1,4 @@
-module Gharial
+module Ghiv
   class Client
     def initialize(query)
       @query = query

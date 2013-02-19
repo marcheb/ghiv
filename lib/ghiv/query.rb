@@ -1,4 +1,4 @@
-module Gharial
+module Ghiv
   class Query
     attr_reader :creator, :direction, :elements, :labels, :number, :sort
 

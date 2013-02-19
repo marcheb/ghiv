@@ -1,4 +1,4 @@
-module Gharial
+module Ghiv
   module Config
     class << self
       require 'yaml'

@@ -1,4 +1,4 @@
-module Gharial
+module Ghiv
   class Issues
     attr_accessor :body, :created_at, :html_url, :number, :state, :title, :url
 

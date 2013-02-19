@@ -1,4 +1,4 @@
-module Gharial
+module Ghiv
   class Transceiver
     require "json"
     require "net/https"
