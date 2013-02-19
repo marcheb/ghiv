@@ -27,7 +27,8 @@ module Ghiv
       options.separator "Specific options:"
       options.on('-c', '--creator CREATOR', "Creator username") { |creator| Config.query_creator = creator }
       options.on('-d', '--direction [DIRECTION]', [:asc, :desc], "Direction for the result [asc|desc]") { |direction| Config.query_direction = direction }
-      options.on('-l', '--labels LABELS', "List of labels separated by commas") { |labels| Config.query_labels = labels.split(',') }
+      options.on('-l', '--labels a,b,c', Array, "List of labels separated by commas") { |labels| Config.query_labels = labels }
+      options.on('-m', '--milestone MILESTONE', Integer, "The number of a specific milestone. 0 for no milestone and -1 for any milestone") { |milestone| Config.query_milestone = milestone }
       options.on('-n', '--number NUMBER', Integer, "The number of a specific issue") { |number| @query.number = number }
       options.on('-s', '--sort [SORT]', [:created, :comments, :updated], "Sort [created|comments|updated]") { |sort| Config.query_sort = sort }
       options.on('-S', '--state [STATE]', [:open, :closed], "State [open|closed]") { |state| Config.query_state = state }

@@ -1,6 +1,6 @@
 module Ghiv
   class Query
-    attr_reader :creator, :direction, :elements, :labels, :number, :sort
+    attr_reader :creator, :direction, :elements, :labels, :milestone, :number, :sort, :state
 
     def initialize
       @number = nil
@@ -33,18 +33,26 @@ module Ghiv
       @labels and not @labels.empty?
     end
 
+    def milestone(milestone)
+      @milestone = case milestone
+        when 0 then 'none'
+        when -1 then '*'
+        else milestone.to_s
+      end
+      self
+    end
+
+    def milestone?
+      @milestone and not @milestone.empty?
+    end
+
     def number=(number)
       @number = number
       self
     end
 
     def set_from_config
-      creator Config.query_creator
-      direction Config.query_direction
-      labels Config.query_labels
-      sort Config.query_sort
-      state Config.query_state
-      #['direction', 'sort'].each { |c| self.send("#{c}=", Config.send("query_#{c}")) if Config.send("query_#{c}" }
+      [:creator, :direction, :labels, :milestone, :sort, :state].each { |c| self.send("#{c}", Config.send("query_#{c}")) if Config.send("query_#{c}") }
     end
 
     def parse
@@ -52,6 +60,7 @@ module Ghiv
       @elements << "creator=#{@creator}" if @creator
       @elements << "direction=#{@direction}" if direction?
       @elements << "labels=#{@labels.join(',')}" if labels?
+      @elements << "milestone=#{@milestone}" if milestone?
       @elements << "sort=#{@sort}" if sort?
       @elements << "state=#{@state}" if state?
     end
