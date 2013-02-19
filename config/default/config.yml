@@ -1,5 +1,19 @@
-:github:
-  :api_url: 'https://api.github.com/repos'
-  :repository: 'my_repos'
-  :user: 'my_user'
-  :password: 'my_pass'
+## Name of your github repository
+#repository: my_repos
+## Your's github username
+#user: my_user
+## Your's github password'
+#password: my_pass
+
+## uncomment query_NAME to changed default query params
+### query_creator CREATOR NAME, default don't filter on creator
+#query_creator: the_creator
+
+### query_direction [asc|desc], default is asc
+#query_direction: asc
+
+### query_labels LABELS NAME, default don't filter on creator
+#query_labels: labels1,labels2
+
+### query_sort [comments|created|updated], default is created
+#query_sort: created
