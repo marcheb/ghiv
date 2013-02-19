@@ -1,5 +1,5 @@
 ## Name of your github repository
-#repository: my_repos
+repository: ghiv
 ## Your's github username
 #user: my_user
 ## Your's github password'
@@ -17,3 +17,6 @@
 
 ### query_sort [comments|created|updated], default is created
 #query_sort: created
+
+### query_state [open|closed], default is open
+#query_state: open

@@ -13,7 +13,8 @@ module Ghiv
         puts "issue number: #{issue.number}"
         puts "title: #{issue.title}"
         puts "body:"
-        puts issue.body
+        puts issue.body if not issue.body.empty?
+        puts "labels: #{ issue.labels.map{ |l| l['name'] }.join(',') }"
         puts "created_at: #{issue.created_at}"
         puts "state: #{issue.state}"
         puts "html_url : #{issue.html_url}"
