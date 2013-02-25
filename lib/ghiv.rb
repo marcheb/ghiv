@@ -3,6 +3,7 @@ $: << File.expand_path(File.dirname(__FILE__))
 require 'ghiv/config'
 require 'ghiv/client'
 require 'ghiv/issues'
+require 'ghiv/method_chain'
 require 'ghiv/query'
 require 'ghiv/runner'
 require 'ghiv/transceiver'

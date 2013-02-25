@@ -8,7 +8,7 @@ module Ghiv
       options = {ssl: false}.merge!(options)
       url = "#{API_URL}/#{Config.user}/#{Config.repository}"
 
-      @uri = URI.parse(url+request)
+      @uri = URI.parse(URI.escape(url+request))
       @http = Net::HTTP.new(@uri.host, @uri.port)
       @http.use_ssl = true if options[:ssl]
     end
