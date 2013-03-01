@@ -23,11 +23,17 @@ module Ghiv
 
       module Emoji
         def self.parser(text)
-          text.gsub!(':mushroom:', mushroom)
+          list.each { |l| text.gsub!(":#{l.to_s}:", send(l.to_s)) }
+          text
+        end
+
+        def self.list
+          [:mushroom, :toilet, :shower]
         end
 
         def self.mushroom
           <<-eos
+
                n
               / `\\
              (___:)
@@ -40,6 +46,38 @@ module Ghiv
               \\\\\\
                ))
                ||
+          eos
+        end
+
+        def self.toilet
+          <<-eos
+
+           .__   .-".
+          (o\\"\\  |  |
+             \\_\\ |  |
+            _.---:_ |
+           ("-..-" /
+            "-.-" /
+              /   |
+              "--"  AsH
+          eos
+        end
+
+        def self.shower
+          <<-eos
+
+                    ,------|
+                   []      |
+                   !!      |
+                   ! ,     |
+                 _,~,\\     |
+                 \\)))/     |
+                 ((((,     |
+                  ) (      |
+                 (( \\      |
+                 |/` \\     |
+                 (| (/     |
+          ejm98  -_ -_    _|_
           eos
         end
       end
