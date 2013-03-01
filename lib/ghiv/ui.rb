@@ -22,13 +22,13 @@ module Ghiv
       end
 
       module Emoji
-        def self.parser(text)
-          list.each { |l| text.gsub!(":#{l.to_s}:", send(l.to_s)) }
-          text
+        def self.find_candidate(text)
+          text.scan(/:(.*?):/).flatten
         end
 
-        def self.list
-          [:mushroom, :toilet, :shower]
+        def self.parser(text)
+          find_candidate(text).each { |c| text.gsub!(":#{c}:", (send(c) rescue ":#{c}:")) }
+          text
         end
 
         def self.mushroom
