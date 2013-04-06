@@ -21,8 +21,10 @@ module Ghiv
         puts "labels: #{ issue.labels.map{ |l| l['name'] }.join(',') }"
         puts "created_at: #{issue.created_at}"
         puts "state: #{issue.state}"
-        puts "html_url : #{issue.html_url}"
-        puts "url : #{issue.url}"
+        puts "html_url: #{issue.html_url}"
+        puts "url: #{issue.url}"
+        puts "creator: #{issue.user['login']}"
+        puts "assignee: #{issue.assignee['login']}" if issue.assignee
         puts "comments: #{issue.comments}"
         if issue.milestone
           puts "milestone_id: #{issue.milestone['id']}"
