@@ -9,7 +9,7 @@ module Ghiv
     end
 
     extend MethodChain
-    chained_attr_accessor :creator, :direction, :labels, :milestone, :number, :sort, :state
+    Query.params.push(:number).each { |p| chained_attr_accessor p }
     attr_reader :elements
 
     def initialize

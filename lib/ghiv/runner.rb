@@ -13,7 +13,11 @@ module Ghiv
       set_default
       parse_options
       response = Client.new(@query).get
-      @query.number ? UI.show(response) : UI.list(response)
+
+      if Config.raw then UI.raw response
+      elsif @query.number then UI.show response
+      else UI.list response
+      end
     end
 
     def parse_options
@@ -23,6 +27,7 @@ module Ghiv
       options.on('-u', '--user USER', "Your Github username")   { |user| Config.user = user }
       options.on('-p', '--password PASSWORD', "Your Github password")   { |password| Config.password = password }
       options.on('-r', '--repository REPOSITORY',"Your Github repository") { |repository| Config.repository = repository }
+      options.on('-R', '--[no-]raw', "Display the raw JSON response from Github") { |raw| Config.raw = raw }
       options.separator ""
       options.separator "Specific options:"
       options.on('-c', '--creator CREATOR', "Creator username") { |creator| Config.query_creator = creator }
@@ -40,6 +45,7 @@ module Ghiv
     def set_default
       Config.in_stream = @stdin
       Config.out_stream = @stdout
+      Config.raw = false
       query_config = [[:direction, :asc], [:sort, :created], [:state, :open]]
       query_config.each { |q, a| Config.send("query_#{q}=", a) if Config.send("query_#{q}") and not Config.send("query_#{q}").empty? }
     end

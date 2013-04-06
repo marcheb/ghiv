@@ -7,7 +7,11 @@ module Ghiv
     end
 
     def get
-      records = Transceiver.new("/issues#{'/' + @query.number.to_s if @query.number }#{'?' + @query.elements.join('&') if not @query.elements.empty?}", ssl: true).get
+      response = Transceiver.new("/issues#{'/' + @query.number.to_s if @query.number }#{'?' + @query.elements.join('&') if not @query.elements.empty?}", ssl: true).get
+      Config.raw ? response : format(response)
+    end
+
+    def format(records)
       records.is_a?(Array) ? records.map { |r| Issues.new(r) } : Issues.new(records)
     end
 

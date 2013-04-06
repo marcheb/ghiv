@@ -1,0 +1,14 @@
+GIT
+  remote: git://github.com/marcheb/askiimoji.git
+  revision: de006780e4b62122263fe48d38427156a08f1954
+  specs:
+    askiimoji (0.0.1)
+
+GEM
+  specs:
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  askiimoji!

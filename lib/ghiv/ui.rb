@@ -1,5 +1,6 @@
 module Ghiv
   class UI
+
     class << self
       def list(issues)
         issues.each { |i| puts "#{i.number}, #{i.title}" }
@@ -7,6 +8,10 @@ module Ghiv
 
       def puts(msg)
         Config.out_stream.puts(msg) if Config.out_stream
+      end
+
+      def raw(issues)
+        puts JSON.pretty_generate issues
       end
 
       def show(issue)
@@ -22,63 +27,16 @@ module Ghiv
       end
 
       module Emoji
-        def self.find_candidate(text)
-          text.scan(/:(.*?):/).flatten
+        def self.candidates(text)
+          text.scan(/:(.*?):/).flatten.compact
         end
 
         def self.parser(text)
-          find_candidate(text).each { |c| text.gsub!(":#{c}:", (send(c) rescue ":#{c}:")) }
+          candidates(text).each do |c|
+            drawing = Askiimoji::Dictionnary.emoji(c)
+            text.gsub!( ":#{c}:", drawing ) if drawing
+          end
           text
-        end
-
-        def self.mushroom
-          <<-eos
-
-               n
-              / `\\
-             (___:)
-              """"
-               ||
-               ||
-               ))
-              //
-             ((
-              \\\\\\
-               ))
-               ||  CJRandall
-          eos
-        end
-
-        def self.toilet
-          <<-eos
-
-           .__   .-".
-          (o\\"\\  |  |
-             \\_\\ |  |
-            _.---:_ |
-           ("-..-" /
-            "-.-" /
-              /   |
-              "--"  AsH
-          eos
-        end
-
-        def self.shower
-          <<-eos
-
-                    ,------|
-                   []      |
-                   !!      |
-                   ! ,     |
-                 _,~,\\     |
-                 \\)))/     |
-                 ((((,     |
-                  ) (      |
-                 (( \\      |
-                 |/` \\     |
-                 (| (/     |
-          ejm98  -_ -_    _|_
-          eos
         end
       end
     end
