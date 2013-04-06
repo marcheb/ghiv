@@ -15,7 +15,7 @@ module Ghiv
       end
 
       def show(issue)
-        puts "issue number: #{issue.number}"
+        puts "issue_number: #{issue.number}"
         puts "title: #{issue.title}"
         puts "body:"
         puts Emoji.parser(issue.body) if not issue.body.empty?
@@ -24,6 +24,14 @@ module Ghiv
         puts "state: #{issue.state}"
         puts "html_url : #{issue.html_url}"
         puts "url : #{issue.url}"
+        puts "comments: #{issue.comments}"
+        if issue.milestone
+          puts "milestone_id: #{issue.milestone['id']}"
+          puts "milestone_title: #{issue.milestone['title']}"
+          puts "milestone_description: #{issue.milestone['description']}" if issue.milestone['description']
+          puts "milestone_url: #{issue.milestone['url']}"
+          puts "milestone_due_on: #{issue.milestone['due_on']}" if issue.milestone['due_on']
+        end
       end
 
       module Emoji
