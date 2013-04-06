@@ -2,6 +2,9 @@ require 'optparse'
 
 module Ghiv
   class Runner
+    ##################################
+    # PUBLIC INSTANCE METHOD         #
+    ##################################
     def initialize(arguments, stdin, stdout)
       @arguments = arguments
       @query = Query.new

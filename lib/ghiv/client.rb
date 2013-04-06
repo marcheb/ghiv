@@ -1,5 +1,8 @@
 module Ghiv
   class Client
+    ##################################
+    # PUBLIC INSTANCE METHOD         #
+    ##################################
     def initialize(query)
       @query = query
       @query.set_from_config
@@ -15,6 +18,9 @@ module Ghiv
       records.is_a?(Array) ? records.map { |r| Issues.new(r) } : Issues.new(records)
     end
 
+    ##################################
+    # PRIVATE METHOD                 #
+    ##################################
     private
     def self.method_missing(name, *args, &block)
       begin

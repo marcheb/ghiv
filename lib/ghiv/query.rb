@@ -1,5 +1,8 @@
 module Ghiv
   class Query
+    ##################################
+    # PUBLIC CLASS METHOD            #
+    ##################################
     def self.format_value(value)
       value.is_a?(Array) ? value.join(',') : value
     end
@@ -8,6 +11,9 @@ module Ghiv
       [:creator, :direction, :labels, :milestone, :sort, :state]
     end
 
+    ##################################
+    # PUBLIC INSTANCE METHOD         #
+    ##################################
     extend MethodChain
     Query.params.push(:number).each { |p| chained_attr_accessor p }
     attr_reader :elements

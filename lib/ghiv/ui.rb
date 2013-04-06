@@ -1,6 +1,5 @@
 module Ghiv
   class UI
-
     class << self
       def list(issues)
         issues.each { |i| puts "#{i.number}, #{i.title}" }
