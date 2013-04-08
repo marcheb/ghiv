@@ -1,12 +1,12 @@
 module Ghiv
-  class Issues
+  class GHService
     ##################################
     # PUBLIC INSTANCE METHOD         #
     ##################################
-    def initialize(hash)
-      hash.each do |k,v|
+    def initialize(record)
+      record.each do |k,v|
         self.class.__send__(:attr_accessor, k)
-        instance_variable_set("@#{k}", v) if respond_to? k
+        instance_variable_set("@#{k}", v)
       end
     end
   end

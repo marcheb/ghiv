@@ -13,11 +13,10 @@ module Ghiv
         puts JSON.pretty_generate issues
       end
 
-      def show(issue)
+      def show(issue, options={comments: nil})
         puts "issue_number: #{issue.number}"
         puts "title: #{issue.title}"
-        puts "body:"
-        puts Emoji.parser(issue.body) if not issue.body.empty?
+        puts "body:" + Emoji.parser(issue.body) if not issue.body.empty?
         puts "labels: #{ issue.labels.map{ |l| l['name'] }.join(',') }"
         puts "created_at: #{issue.created_at}"
         puts "state: #{issue.state}"
@@ -32,6 +31,14 @@ module Ghiv
           puts "milestone_description: #{issue.milestone['description']}" if issue.milestone['description']
           puts "milestone_url: #{issue.milestone['url']}"
           puts "milestone_due_on: #{issue.milestone['due_on']}" if issue.milestone['due_on']
+        end
+
+        if options[:comments]
+          options[:comments].each do |c|
+            puts "comment_id: " + c.id.to_s
+            puts "comment_body: " + c.body
+            puts "comment_creator: " + c.user['login']
+          end
         end
       end
 

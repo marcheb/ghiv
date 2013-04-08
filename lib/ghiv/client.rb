@@ -9,14 +9,23 @@ module Ghiv
       @query.parse
     end
 
-    def get
-      response = Transceiver.new("/issues#{'/' + @query.number.to_s if @query.number }#{'?' + @query.elements.join('&') if not @query.elements.empty?}", ssl: true).get
+    def get(service)
+      response = self.send("get_#{service}")
       Config.raw ? response : format(response)
     end
 
-    def format(records)
-      records.is_a?(Array) ? records.map { |r| Issues.new(r) } : Issues.new(records)
+    def get_comments
+      response = Transceiver.new("/issues/#{@query.number.to_s}/comments", ssl: true).get
     end
+
+    def get_issues
+      Transceiver.new("/issues#{'/' + @query.number.to_s if @query.number }#{'?' + @query.elements.join('&') if not @query.elements.empty?}", ssl: true).get
+    end
+
+    def format(records)
+      records.is_a?(Array) ? records.map { |r| GHService.new(r) } : GHService.new(records)
+    end
+
 
     ##################################
     # PRIVATE METHOD                 #

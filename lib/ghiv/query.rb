@@ -15,7 +15,7 @@ module Ghiv
     # PUBLIC INSTANCE METHOD         #
     ##################################
     extend MethodChain
-    Query.params.push(:number).each { |p| chained_attr_accessor p }
+    Query.params.push(:comments, :number).each { |p| chained_attr_accessor p }
     attr_reader :elements
 
     def initialize

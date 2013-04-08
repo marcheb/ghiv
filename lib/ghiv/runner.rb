@@ -15,11 +15,18 @@ module Ghiv
     def run
       set_default
       parse_options
-      response = Client.new(@query).get
+      client = Client.new(@query)
 
-      if Config.raw then UI.raw response
-      elsif @query.number then UI.show response
-      else UI.list response
+      response = client.get('issues')
+
+      if Config.raw
+        UI.raw response
+      elsif @query.number
+        options = {}
+        options[:comments] = client.get('comments') if response.comments > 0
+        UI.show response, options
+      else
+        UI.list response
       end
     end
 
