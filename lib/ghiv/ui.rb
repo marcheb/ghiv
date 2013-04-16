@@ -1,8 +1,41 @@
 module Ghiv
   class UI
     class << self
-      def list(issues)
-        issues.each { |i| puts "#{i.number}, #{i.title}" }
+      def comments(records)
+
+      end
+
+      def issue(records, options={comments: nil})
+        puts "issue_number: #{records.number}"
+        puts "title: #{records.title}"
+        puts "body:" + Emoji.parser(records.body) if not records.body.empty?
+        puts "labels: #{ records.labels.map{ |l| l['name'] }.join(',') }"
+        puts "created_at: #{records.created_at}"
+        puts "state: #{records.state}"
+        puts "html_url: #{records.html_url}"
+        puts "url: #{records.url}"
+        puts "creator: #{records.user['login']}"
+        puts "assignee: #{records.assignee['login']}" if records.assignee
+        puts "comments: #{records.comments}"
+        if records.milestone
+          puts "milestone_id: #{records.milestone['id']}"
+          puts "milestone_title: #{records.milestone['title']}"
+          puts "milestone_description: #{records.milestone['description']}" if records.milestone['description']
+          puts "milestone_url: #{records.milestone['url']}"
+          puts "milestone_due_on: #{records.milestone['due_on']}" if records.milestone['due_on']
+        end
+
+        if options[:comments]
+          options[:comments].each do |c|
+            puts "comment_id: " + c.id.to_s
+            puts "comment_body: " + Emoji.parser(c.body) if not c.body.empty?
+            puts "comment_creator: " + c.user['login']
+          end
+        end
+      end
+
+      def issues(records)
+        records.each { |i| puts "#{i.number}, #{i.title}" }
       end
 
       def puts(msg)
@@ -11,35 +44,6 @@ module Ghiv
 
       def raw(issues)
         puts JSON.pretty_generate issues
-      end
-
-      def show(issue, options={comments: nil})
-        puts "issue_number: #{issue.number}"
-        puts "title: #{issue.title}"
-        puts "body:" + Emoji.parser(issue.body) if not issue.body.empty?
-        puts "labels: #{ issue.labels.map{ |l| l['name'] }.join(',') }"
-        puts "created_at: #{issue.created_at}"
-        puts "state: #{issue.state}"
-        puts "html_url: #{issue.html_url}"
-        puts "url: #{issue.url}"
-        puts "creator: #{issue.user['login']}"
-        puts "assignee: #{issue.assignee['login']}" if issue.assignee
-        puts "comments: #{issue.comments}"
-        if issue.milestone
-          puts "milestone_id: #{issue.milestone['id']}"
-          puts "milestone_title: #{issue.milestone['title']}"
-          puts "milestone_description: #{issue.milestone['description']}" if issue.milestone['description']
-          puts "milestone_url: #{issue.milestone['url']}"
-          puts "milestone_due_on: #{issue.milestone['due_on']}" if issue.milestone['due_on']
-        end
-
-        if options[:comments]
-          options[:comments].each do |c|
-            puts "comment_id: " + c.id.to_s
-            puts "comment_body: " + c.body
-            puts "comment_creator: " + c.user['login']
-          end
-        end
       end
 
       module Emoji

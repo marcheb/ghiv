@@ -2,8 +2,8 @@ $: << File.expand_path(File.dirname(__FILE__))
 
 require 'askiimoji'
 require 'ghiv/config'
+require 'ghiv/class_factory'
 require 'ghiv/client'
-require 'ghiv/gh_service'
 require 'ghiv/method_chain'
 require 'ghiv/query'
 require 'ghiv/runner'

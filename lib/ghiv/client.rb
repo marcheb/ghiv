@@ -3,27 +3,34 @@ module Ghiv
     ##################################
     # PUBLIC INSTANCE METHOD         #
     ##################################
+    attr_reader :service
+
     def initialize(query)
       @query = query
       @query.set_from_config
       @query.parse
+      @service = @query.number ? 'issue' : 'issues'
     end
 
-    def get(service)
+    def get(service=@service)
       response = self.send("get_#{service}")
       Config.raw ? response : format(response)
     end
 
     def get_comments
-      response = Transceiver.new("/issues/#{@query.number.to_s}/comments", ssl: true).get
+      Transceiver.new("/issues/#{@query.number.to_s}/comments", ssl: true).get
+    end
+
+    def get_issue
+      Transceiver.new("/issues/#{@query.number.to_s}", ssl: true).get
     end
 
     def get_issues
-      Transceiver.new("/issues#{'/' + @query.number.to_s if @query.number }#{'?' + @query.elements.join('&') if not @query.elements.empty?}", ssl: true).get
+      Transceiver.new("/issues#{'?' + @query.elements.join('&') if not @query.elements.empty?}", ssl: true).get
     end
 
     def format(records)
-      records.is_a?(Array) ? records.map { |r| GHService.new(r) } : GHService.new(records)
+      records.is_a?(Array) ? records.map { |r| ClassFactory.new(r) } : ClassFactory.new(records)
     end
 
 

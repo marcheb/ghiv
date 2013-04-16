@@ -17,16 +17,16 @@ module Ghiv
       parse_options
       client = Client.new(@query)
 
-      response = client.get('issues')
+      response = client.get
 
       if Config.raw
         UI.raw response
       elsif @query.number
         options = {}
         options[:comments] = client.get('comments') if response.comments > 0
-        UI.show response, options
+        UI.issue response, options
       else
-        UI.list response
+        UI.issues response
       end
     end
 

@@ -1,5 +1,5 @@
 module Ghiv
-  class GHService
+  class ClassFactory
     ##################################
     # PUBLIC INSTANCE METHOD         #
     ##################################
