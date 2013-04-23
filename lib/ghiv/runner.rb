@@ -14,7 +14,8 @@ module Ghiv
 
     def run
       set_default
-      parse_options
+      parse_global.order!
+      parse_command(ARGV.shift)
       client = Client.new(@query)
 
       response = client.get
@@ -30,26 +31,49 @@ module Ghiv
       end
     end
 
-    def parse_options
-      options = OptionParser.new
-      options.banner = "Usage: ghiv [options]"
-      options.separator "Global options:"
-      options.on('-u', '--user USER', "Your Github username")   { |user| Config.user = user }
-      options.on('-p', '--password PASSWORD', "Your Github password")   { |password| Config.password = password }
-      options.on('-r', '--repository REPOSITORY',"Your Github repository") { |repository| Config.repository = repository }
-      options.on('-R', '--[no-]raw', "Display the raw JSON response from Github") { |raw| Config.raw = raw }
-      options.separator ""
-      options.separator "Specific options:"
-      options.on('-c', '--creator CREATOR', "Creator username") { |creator| Config.query_creator = creator }
-      options.on('-d', '--direction [DIRECTION]', [:asc, :desc], "Direction for the result [asc|desc]") { |direction| Config.query_direction = direction }
-      options.on('-l', '--labels a,b,c', Array, "List of labels separated by commas") { |labels| Config.query_labels = labels }
-      options.on('-m', '--milestone MILESTONE', /\d+|\*|none/, "The number of a specific milestone. \"none\" for no milestone and \"*\" for any milestone") { |milestone| Config.query_milestone = milestone }
-      options.on('-n', '--number NUMBER', Integer, "The number of a specific issue") { |number| @query.number number }
-      options.on('-s', '--sort [SORT]', [:created, :comments, :updated], "Sort [created|comments|updated]") { |sort| Config.query_sort = sort }
-      options.on('-S', '--state [STATE]', [:open, :closed], "State [open|closed]") { |state| Config.query_state = state }
-      options.on_tail('-h', '--help', "Show this message") { puts(options); exit }
+    def commands
+      {issues: 'List issues', issue: 'Display a specific issue'}
+    end
 
-      options.parse!(@arguments)
+    def parse_command(command)
+      (!command.nil? and commands.include?(command.to_sym)) ? send("parse_#{command}") : raise("Invalid command\n\nCommand:\n#{commands.map{|k,v| "\t#{k.to_s}\t\t #{v}" }.join("\n")}\n\n")
+    end
+
+    def parse_issue
+      OptionParser.new do |options|
+        options.banner = "Usage: ghiv issue [issue number(Integer)|options]"
+        options.on_tail('-h', '--help', "Show this message") { puts(options); exit }
+      end.parse!
+      (@arguments[0].to_i ? @query.number(@arguments[0]) : raise("You have to use an Integer"))
+    end
+
+    def parse_issues
+      OptionParser.new do |options|
+        options.separator "Issues options:"
+        options.on('-c', '--creator CREATOR', "Creator username") { |creator| Config.query_creator = creator }
+        options.on('-d', '--direction [DIRECTION]', [:asc, :desc], "Direction for the result [asc|desc]") { |direction| Config.query_direction = direction }
+        options.on('-l', '--labels a,b,c', Array, "List of labels separated by commas") { |labels| Config.query_labels = labels }
+        options.on('-m', '--milestone MILESTONE', /\d+|\*|none/, "The number of a specific milestone. \"none\" for no milestone and \"*\" for any milestone") { |milestone| Config.query_milestone = milestone }
+        options.on('-s', '--sort [SORT]', [:created, :comments, :updated], "Sort [created|comments|updated]") { |sort| Config.query_sort = sort }
+        options.on('-S', '--state [STATE]', [:open, :closed], "State [open|closed]") { |state| Config.query_state = state }
+        options.on_tail('-h', '--help', "Show this message") { puts(options); exit }
+      end.parse!
+    end
+
+    def parse_global
+      OptionParser.new do |options|
+        options.banner = "Usage: ghiv [options]"
+        options.separator "Global options:"
+        options.on('-u', '--user USER', "Your Github username")   { |user| Config.user = user }
+        options.on('-p', '--password PASSWORD', "Your Github password")   { |password| Config.password = password }
+        options.on('-r', '--repository REPOSITORY',"Your Github repository") { |repository| Config.repository = repository }
+        options.on('-R', '--[no-]raw', "Display the raw JSON response from Github") { |raw| Config.raw = raw }
+        options.on_tail('-h', '--help', "Show this message") { puts(options); exit }
+        options.on_tail ""
+        options.on_tail "Commands:"
+        commands.each { |k,v| options.on_tail "\t#{k.to_s}\t\t #{v}" }
+
+      end
     end
 
     def set_default
