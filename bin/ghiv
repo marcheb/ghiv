@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 require File.expand_path(File.dirname(__FILE__)) + '/../lib/ghiv'
 
-runner = Ghiv::Runner.new(ARGV, STDIN, STDOUT)
+runner = Ghiv::Runner.new(STDIN, STDOUT)
 runner.run
