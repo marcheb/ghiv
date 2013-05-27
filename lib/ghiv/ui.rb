@@ -2,7 +2,9 @@ module Ghiv
   class UI
     class << self
       def comments(records)
-
+        puts "comment_id: " + records.id.to_s
+        puts "comment_body: " + Emoji.parser(records.body) if not records.body.empty?
+        puts "comment_creator: " + records.user['login']
       end
 
       def issue(records, options={comments: nil})
@@ -23,14 +25,6 @@ module Ghiv
           puts "milestone_description: #{records.milestone['description']}" if records.milestone['description']
           puts "milestone_url: #{records.milestone['url']}"
           puts "milestone_due_on: #{records.milestone['due_on']}" if records.milestone['due_on']
-        end
-
-        if options[:comments]
-          options[:comments].each do |c|
-            puts "comment_id: " + c.id.to_s
-            puts "comment_body: " + Emoji.parser(c.body) if not c.body.empty?
-            puts "comment_creator: " + c.user['login']
-          end
         end
       end
 

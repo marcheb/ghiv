@@ -1,33 +1,38 @@
 module Ghiv
-  class Query
-    ##################################
-    # PUBLIC CLASS METHOD            #
-    ##################################
-    def self.format_value(value)
-      value.is_a?(Array) ? value.join(',') : value
-    end
+  module Query
+    class Base
+      ##################################
+      # PUBLIC CLASS METHOD            #
+      ##################################
+      def self.format_value(value)
+        value.is_a?(Array) ? value.join(',') : value
+      end
 
-    def self.params
-      [:creator, :direction, :labels, :milestone, :sort, :state]
-    end
+      def self.params
+        nil
+      end
 
-    ##################################
-    # PUBLIC INSTANCE METHOD         #
-    ##################################
-    extend MethodChain
-    Query.params.push(:comments, :number).each { |p| chained_attr_accessor p }
-    attr_reader :elements
+      ##################################
+      # PUBLIC INSTANCE METHOD         #
+      ##################################
+      extend Ghiv::MethodChain
+      attr_reader :elements
 
-    def initialize
-      @elements = []
-    end
+      def initialize
+        @elements = []
+      end
 
-    def parse
-      Query.params.each { |q| elements << "#{q.to_s}=#{Query.format_value(self.send(q.to_s))}" if self.send(q) }
-    end
+      def parse
+        eval(self.class.name).params.each { |q| elements << "#{q.to_s}=#{eval(self.class.name).format_value(self.send(q.to_s))}" if self.send(q) } if eval(self.class.name).params
+      end
 
-    def set_from_config
-      Query.params.each { |c| self.send("#{c}", Config.send("query_#{c}")) if Config.send("query_#{c}") }
+      def default_queries_values
+        nil
+      end
+
+      def set_from_config
+        eval(self.class.name).params.each { |c| self.send("#{c}", Config.send("query_#{c}")) if Config.send("query_#{c}") } if eval(self.class.name).params
+      end
     end
   end
 end

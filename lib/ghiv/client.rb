@@ -5,11 +5,12 @@ module Ghiv
     ##################################
     attr_reader :service
 
-    def initialize(query)
-      @query = query
+    def initialize(service)
+      @query = eval("Query::#{service.to_s.capitalize}").new
+
       @query.set_from_config
       @query.parse
-      @service = @query.number ? 'issue' : 'issues'
+      @service = service
     end
 
     def get(service=@service)
@@ -22,7 +23,7 @@ module Ghiv
     end
 
     def get_issue
-      Transceiver.new("/issues/#{@query.number.to_s}", ssl: true).get
+      Transceiver.new("/issues/#{@query.number}", ssl: true).get
     end
 
     def get_issues

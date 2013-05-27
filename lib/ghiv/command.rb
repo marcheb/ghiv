@@ -15,19 +15,12 @@ module Ghiv
       # PUBLIC INSTANCE METHOD         #
       ##################################
       def initialize
-        @query = Query.new
-        set_config if default_queries
+        set_config if default_queries_values
         options.parse!
         non_options_args if non_options_args
-
-        client = Client.new(@query)
-
-        response = client.get
-
-        render response
       end
 
-      def default_queries
+      def default_queries_values
         nil
       end
 
@@ -35,8 +28,12 @@ module Ghiv
         nil
       end
 
+      def render(response)
+        Ghiv::UI.send(self.class.name.downcase.sub('ghiv::command::',''), response)
+      end
+
       def set_config
-        default_queries.each { |q, a| Config.send("query_#{q}=", a) if Config.send("query_#{q}") and not Config.send("query_#{q}").empty? }
+        default_queries_values.each { |q, a| Config.send("query_#{q}=", a) if Config.send("query_#{q}") and not Config.send("query_#{q}").empty? }
       end
     end
   end

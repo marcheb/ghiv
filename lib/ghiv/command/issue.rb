@@ -5,6 +5,13 @@ module Ghiv::Command
     ##################################
     # PUBLIC INSTANCE METHOD         #
     ##################################
+    def initialize
+      @query = Ghiv::Query::Issue.new
+      super
+      client = Ghiv::Client.new(:issue)
+      render client.get
+    end
+
     def options
       OptionParser.new do |options|
         options.banner = "Usage: ghiv issue [issue number(Integer)|options]"
@@ -13,11 +20,7 @@ module Ghiv::Command
     end
 
     def non_options_args
-      (ARGV[0].to_i ? @query.number(ARGV[0]) : puts("You have to use an Integer"))
-    end
-
-    def render(response)
-      Ghiv::UI.issue response
+      (ARGV[0].to_i ? Ghiv::Config.query_number = (ARGV[0]) : puts("You have to use an Integer"))
     end
   end
 end
