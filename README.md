@@ -1,4 +1,4 @@
 ghiv
 ==============
 
-Github issues viewer
+Github issues client
