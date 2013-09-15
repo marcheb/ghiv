@@ -6,8 +6,9 @@ module Ghiv::Query
 
     self.params.each { |p| chained_attr_accessor p } if self.params
 
-    def default_queries_values
-      [[:direction, :asc], [:sort, :created], [:state, :open]]
+
+    def build
+      path + '?' + Issues.params.map { |p| "#{p.to_s}=#{Issues.format_value(self.send(p.to_s))}" if self.send(p) }.compact.join('&')
     end
   end
 end

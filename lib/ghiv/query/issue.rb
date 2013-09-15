@@ -5,5 +5,10 @@ module Ghiv::Query
     end
 
     self.params.each { |p| chained_attr_accessor p } if self.params
+
+
+    def build
+      path + "/" + number
+    end
   end
 end
