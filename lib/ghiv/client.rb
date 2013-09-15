@@ -1,8 +1,5 @@
 module Ghiv
   class Client
-    ##################################
-    # PUBLIC INSTANCE METHOD         #
-    ##################################
     attr_reader :service
 
     def initialize(service)
@@ -13,32 +10,25 @@ module Ghiv
       @service = service
     end
 
-    def get(service=@service)
-      response = self.send("get_#{service}")
-      Config.raw ? response : format(response)
+    def get
+      response = Transceiver.new("/issues#{self.send(service)}", ssl: true).get
     end
 
-    def get_comments
-      Transceiver.new("/issues/#{@query.number.to_s}/comments", ssl: true).get
+    def comments
+      "/#{@query.number.to_s}/comments"
     end
 
-    def get_issue
-      Transceiver.new("/issues/#{@query.number}", ssl: true).get
+    def issue
+      "/#{@query.number}"
     end
 
-    def get_issues
-      Transceiver.new("/issues#{'?' + @query.elements.join('&') if not @query.elements.empty?}", ssl: true).get
-    end
-
-    def format(records)
-      records.is_a?(Array) ? records.map { |r| ClassFactory.new(r) } : ClassFactory.new(records)
+    def issues
+      '?' + @query.elements.join('&') if not @query.elements.empty?
     end
 
 
-    ##################################
-    # PRIVATE METHOD                 #
-    ##################################
     private
+
     def self.method_missing(name, *args, &block)
       begin
         (args.empty? || args.first.empty?) ? @query.send(name) : @query.send(name, args.first)

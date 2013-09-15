@@ -2,9 +2,6 @@ require 'optparse'
 
 module Ghiv
   class Runner
-    ##################################
-    # PUBLIC INSTANCE METHOD         #
-    ##################################
     def initialize(stdin, stdout)
       @stdin = stdin
       @stdout = stdout
@@ -31,6 +28,7 @@ module Ghiv
         options.separator "Global options:"
         options.on('-u', '--user USER', "Your Github username")   { |user| Config.user = user }
         options.on('-p', '--password PASSWORD', "Your Github password")   { |password| Config.password = password }
+        options.on('-P', '--[no-]pretty_json', "Display pretty json on raw output")   { |pretty_json| Config.pretty_json = pretty_json }
         options.on('-r', '--repository REPOSITORY',"Your Github repository") { |repository| Config.repository = repository }
         options.on('-R', '--[no-]raw', "Display the raw JSON response from Github") { |raw| Config.raw = raw }
         options.on_tail('-h', '--help', "Show this message") { puts(options); exit }
@@ -43,6 +41,7 @@ module Ghiv
     def set_default
       Config.in_stream = @stdin
       Config.out_stream = @stdout
+      Config.pretty_json = true
       Config.raw = false
     end
   end

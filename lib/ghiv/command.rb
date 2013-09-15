@@ -1,19 +1,14 @@
+require 'json'
 require 'optparse'
 
 module Ghiv
   module Command
     class Base
-      ##################################
-      # PUBLIC CLASS METHOD         #
-      ##################################
       def self.commands
         {issues: 'List issues', issue: 'Display a specific issue'}
       end
 
 
-      ##################################
-      # PUBLIC INSTANCE METHOD         #
-      ##################################
       def initialize
         set_config if default_queries_values
         options.parse!
@@ -29,7 +24,8 @@ module Ghiv
       end
 
       def render(response)
-        Ghiv::UI.send(self.class.name.downcase.sub('ghiv::command::',''), response)
+        service = self.class.name.downcase.sub('ghiv::command::','')
+        Ghiv::UI.new(service, response).render
       end
 
       def set_config

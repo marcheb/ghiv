@@ -1,9 +1,6 @@
 module Ghiv
   module Query
     class Base
-      ##################################
-      # PUBLIC CLASS METHOD            #
-      ##################################
       def self.format_value(value)
         value.is_a?(Array) ? value.join(',') : value
       end
@@ -12,9 +9,7 @@ module Ghiv
         nil
       end
 
-      ##################################
-      # PUBLIC INSTANCE METHOD         #
-      ##################################
+
       extend Ghiv::MethodChain
       attr_reader :elements
 

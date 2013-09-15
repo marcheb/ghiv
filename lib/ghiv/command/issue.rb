@@ -2,11 +2,7 @@ require 'optparse'
 
 module Ghiv::Command
   class Issue < Base
-    ##################################
-    # PUBLIC INSTANCE METHOD         #
-    ##################################
     def initialize
-      @query = Ghiv::Query::Issue.new
       super
       client = Ghiv::Client.new(:issue)
       render client.get
